@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app';
 import Header from '../components/Header';
 import Player from '../components/Player';
 
-function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className={styles.wrapper}>
       <main>
@@ -15,5 +15,3 @@ function MyApp({ Component, pageProps }: AppProps) {
     </div>
   );
 }
-
-export default MyApp;
