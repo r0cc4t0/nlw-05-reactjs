@@ -23,7 +23,8 @@ function Player() {
     hasNext,
     hasPrevious,
     playNext,
-    playPrevious
+    playPrevious,
+    clearPlayerState
   } = useContext(PlayerContext);
 
   useEffect(() => {
@@ -46,6 +47,22 @@ function Player() {
           setProgress(Math.floor(audioRef.current.currentTime));
         }
       });
+    }
+  }
+
+  function handleSeek(amount: number) {
+    if (audioRef.current) {
+      audioRef.current.currentTime = amount;
+      setProgress(amount);
+    }
+  }
+
+  function handleEpisodeEnded() {
+    if (hasNext) {
+      playNext();
+    }
+    else {
+      clearPlayerState();
     }
   }
 
@@ -78,6 +95,7 @@ function Player() {
               <Slider
                 max={episode.duration}
                 value={progress}
+                onChange={handleSeek}
                 trackStyle={{ backgroundColor: '#04d361' }}
                 railStyle={{ backgroundColor: '#9f75ff' }}
                 handleStyle={{ borderColor: '#04d361', borderWidth: 4 }}
@@ -93,8 +111,9 @@ function Player() {
           <audio
             src={episode.url}
             ref={audioRef}
-            autoPlay
             loop={isLooping}
+            autoPlay
+            onEnded={handleEpisodeEnded}
             onPlay={() => setPlayingState(true)}
             onPause={() => setPlayingState(false)}
             onLoadedMetadata={setupProgressListener}
